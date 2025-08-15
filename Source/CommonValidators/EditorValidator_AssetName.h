@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EditorValidatorBase.h"
+#include "ValidationSettings.h"
 
 #include "EditorValidator_AssetName.generated.h"
 
@@ -22,4 +23,8 @@ class COMMONVALIDATORS_API UEditorValidator_AssetName : public UEditorValidatorB
 		const FAssetData& InAssetData, UObject* InAsset, FDataValidationContext& Context) override;
 
 	bool IsAssetNameGuidelineConforming(const UObject* InAsset, FDataValidationContext& InContext) const;
+	bool CheckAssetPrefix(const UObject* InAsset, FDataValidationContext& InContext) const;
+	bool HandleSpecialCases(const UClass* Class, bool& bOutIsSpecialCase) const;
+
+	bool IsMatchingFixes(const FString& AssetName, const UClass* Class, FDataValidationContext& InContext) const;
 };

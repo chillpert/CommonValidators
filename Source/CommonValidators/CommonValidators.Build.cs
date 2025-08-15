@@ -6,12 +6,16 @@ public class CommonValidators : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateDependencyModuleNames.AddRange(new string[] {
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
 			"Core",
 			"CoreUObject",
 			"Engine",
 			"DataValidation",
-			"BlueprintGraph"
+			"BlueprintGraph",
+			"DeveloperSettings",
+			"EditorSubsystem",
+			"UnrealEd"
 		});
 	}
 }
