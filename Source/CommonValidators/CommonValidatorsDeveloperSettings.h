@@ -8,13 +8,25 @@ USTRUCT(BlueprintType)
 struct FCommonValidatorClassArray
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Common Validators")
 	TArray<TSubclassOf<UObject>> ClassList;
 
 	// Should this rule propagate to discovered children?
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Common Validators")
 	bool AllowPropagationToChildren = true;
+};
+
+USTRUCT(BlueprintType)
+struct FAssetNameFix
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	FString Prefix;
+
+	UPROPERTY(EditAnywhere)
+	FString Postfix;
 };
 
 UCLASS(config = Editor, defaultconfig, meta = (DisplayName = "Common Validators"))
@@ -26,23 +38,24 @@ public:
 	// If true, we will validate for empty tick nodes.
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators")
 	bool bEnableEmptyTickNodeValidator = true;
-	
+
 	//If true, we throw an error, otherwise a warning!
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators", meta = (EditCondition = "bEnableEmptyTickNodeValidator == true"))
 	bool bErrorOnEmptyTickNodes = true;
-	
+
 	// if true, we will validate for pure nodes being executed multiple times
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators")
 	bool bEnablePureNodeMultiExecValidator = true;
-	
+
 	//If true, we throw an error, otherwise a warning!
-	UPROPERTY(Config, EditAnywhere, Category="Common Validators", meta = (EditCondition = "bEnablePureNodeMultiExecValidator == true"))
+	UPROPERTY(Config, EditAnywhere, Category="Common Validators",
+		meta = (EditCondition = "bEnablePureNodeMultiExecValidator == true"))
 	bool bErrorOnPureNodeMultiExec = true;
-	
+
 	// If true, we will validate for blocking loads in blueprints
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators")
 	bool bEnableBlockingLoadValidator = true;
-	
+
 	//If true, we throw an error, otherwise a warning!
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators", meta = (EditCondition = "bEnableBlockingLoadValidator == true"))
 	bool bErrorBlockingLoad = true;
@@ -71,4 +84,7 @@ public:
 	// Classes in this list, and only classes in this list, are ignored by heavy reference validator
 	UPROPERTY(Config, EditAnywhere, Category="Common Validators", meta = (EditCondition = "bEnableHeavyReferenceValidator == true"))
 	TMap<TSubclassOf<UObject>, FCommonValidatorClassArray> HeavyValidatorClassSpecificClassIgnoreList;
+
+	UPROPERTY(Config, EditAnywhere, BlueprintReadOnly, Category = "Common Validation", Meta = (AllowAbstract = "true"))
+	TMap<TSoftClassPtr<UObject>, FAssetNameFix> AssetPrefixRules;
 };

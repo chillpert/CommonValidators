@@ -1,9 +1,9 @@
 //
 
 #include "EditorValidator_AssetName.h"
+#include "CommonValidatorsDeveloperSettings.h"
 
 #include "Misc/DataValidation.h"
-#include "ValidationSettings.h"
 
 #if WITH_EDITOR
 #define LOCTEXT_NAMESPACE "UMG"
@@ -141,7 +141,7 @@ bool UEditorValidator_AssetName::CheckAssetPrefix(const UObject* InAsset, FDataV
 bool UEditorValidator_AssetName::IsMatchingFixes(
 	const FString& AssetName, const UClass* Class, FDataValidationContext& InContext) const
 {
-	const UValidationSettings* ValidationSettings = GetDefault<UValidationSettings>();
+	const UCommonValidatorsDeveloperSettings* ValidationSettings = GetDefault<UCommonValidatorsDeveloperSettings>();
 	check(ValidationSettings != nullptr);
 
 	if (const FAssetNameFix* Result = ValidationSettings->AssetPrefixRules.Find(Class); Result != nullptr)
@@ -174,7 +174,7 @@ bool UEditorValidator_AssetName::IsMatchingFixes(
 
 					const FText Output = FText::Format(
 						FText::FromString(TEXT("The asset is not following the naming conventions. All assets of type '{0}' "
-											   "must end with the postfix '{1}'")),
+							"must end with the postfix '{1}'")),
 						FText::FromString(Class->GetName()), FText::FromString(*Result->Postfix));
 
 					InContext.AddError(Output);
@@ -186,7 +186,7 @@ bool UEditorValidator_AssetName::IsMatchingFixes(
 
 			const FText Output =
 				FText::Format(FText::FromString(TEXT("The asset is not following the naming conventions. All assets of type '{0}' "
-													 "must start with the prefix '{1}'")),
+						"must start with the prefix '{1}'")),
 					FText::FromString(Class->GetName()), FText::FromString(*Result->Prefix));
 
 			InContext.AddError(Output);

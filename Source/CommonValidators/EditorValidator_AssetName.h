@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "EditorValidatorBase.h"
-#include "ValidationSettings.h"
 
 #include "EditorValidator_AssetName.generated.h"
 
