@@ -2,9 +2,7 @@
 
 #include "AssetManagerEditor/Public/AssetManagerEditorModule.h"
 #include "AssetRegistry/AssetRegistryModule.h"
-#include "Engine/AssetManager.h"
 #include "Engine/Blueprint.h"
-#include "Kismet2/BlueprintEditorUtils.h"
 #include "Misc/DataValidation.h"
 
 #include "CommonValidatorsStatics.h"
@@ -41,7 +39,7 @@ bool UEditorValidator_HeavyReference::CanValidateAsset_Implementation(
 		HeavyValidatorClassAndChildIgnoreList;
 	for (const TSoftClassPtr<UObject>& IgnoredChild : IgnoreChildrenList)
 	{
-		if (IgnoredChild.IsLoaded() && UCommonValidatorsStatics::IsObjectAChildOf(InObject, IgnoredChild.Get()))
+		if (IgnoredChild.IsValid() && UCommonValidatorsStatics::IsObjectAChildOf(InObject, IgnoredChild.Get()))
 		{
 			return false;
 		}
@@ -71,7 +69,7 @@ EDataValidationResult UEditorValidator_HeavyReference::ValidateLoadedAsset_Imple
 	const TArray<TSoftClassPtr<UObject>>& IgnoreChildrenList = DevSettings->HeavyValidatorClassAndChildIgnoreList;
 	for (const TSoftClassPtr<UObject>& IgnoredChild : IgnoreChildrenList)
 	{
-		if (IgnoredChild.IsLoaded() && UCommonValidatorsStatics::IsObjectAChildOf(InAsset, IgnoredChild.Get()))
+		if (IgnoredChild.IsValid() && UCommonValidatorsStatics::IsObjectAChildOf(InAsset, IgnoredChild.Get()))
 		{
 			return EDataValidationResult::NotValidated;
 		}
@@ -177,7 +175,7 @@ bool UEditorValidator_HeavyReference::IsAssetIncluded(const UCommonValidatorsDev
 	for (auto &ClassToIgnoreEntry : DevSettings->HeavyValidatorClassSpecificClassIgnoreList)
 	{
 		// we can skip unloaded classes
-		if(!ClassToIgnoreEntry.Key.IsLoaded())
+		if(!ClassToIgnoreEntry.Key.IsValid())
 			continue;
 		
 		// Does this apply to this asset?
@@ -190,7 +188,7 @@ bool UEditorValidator_HeavyReference::IsAssetIncluded(const UCommonValidatorsDev
 			{
 				for(auto &SoftClassPtr : ClassToIgnoreEntry.Value.ClassList)
 				{
-					if(SoftClassPtr.IsLoaded())
+					if(SoftClassPtr.IsValid())
 					{
 						IgnoredClassList.Add(SoftClassPtr.Get());
 					}
